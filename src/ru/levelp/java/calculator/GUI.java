@@ -25,7 +25,7 @@ public class GUI {
         JFrame frame = new JFrame("Calculator");
         //frameOperators.add(panelOperators);
         //frameOperators.add(panelEquals);
-        frame.setBounds(100, 100, 350, 157);
+        frame.setBounds(100, 100, 350, 147);
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         panel.setLayout(gridLayoutNumbers);
         panelOperators.setLayout(gridLayoutOperators);
