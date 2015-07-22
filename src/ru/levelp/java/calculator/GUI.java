@@ -1,9 +1,11 @@
 package ru.levelp.java.calculator;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Arc2D;
 import java.util.ArrayList;
 
 public class GUI {
@@ -11,6 +13,7 @@ public class GUI {
     private ArrayList<JButton> buttons = new ArrayList<JButton>();
     private GridLayout gridLayoutNumbers = new GridLayout(4, 3);
     private GridLayout gridLayoutOperators = new GridLayout(2, 2);
+    private GridLayout gridLayoutMemory = new GridLayout(4,1);
     private JPanel panel = new JPanel();
     private JPanel panelOperators = new JPanel();
     private JPanel panelEquals = new JPanel();
@@ -21,8 +24,10 @@ public class GUI {
     private JPanel panelBackspaceC_Operators_Main = new JPanel();
     private JPanel panelLabel = new JPanel();
     private JPanel panelRight = new JPanel();
+    private JPanel panelMemory = new JPanel();
     private JLabel textField = new JLabel("0");
     private double current;
+    private double memory;
     private String operation = "";
     private  boolean clear = false;
     private NumButtonListener NBL = new NumButtonListener(this);
@@ -32,7 +37,7 @@ public class GUI {
         JFrame frame = new JFrame("Calculator");
         //frameOperators.add(panelOperators);
         //frameOperators.add(panelEquals);
-        frame.setBounds(100, 100, 350, 138);
+        frame.setBounds(100, 100, 350, 150);
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         panel.setLayout(gridLayoutNumbers);
         panelOperators.setLayout(gridLayoutOperators);
@@ -44,8 +49,14 @@ public class GUI {
         panelBackspaceC_Operators_Main.setLayout(new BorderLayout());
         panelLabel.setLayout(new BorderLayout());
         panelRight.setLayout(new BorderLayout());
+        panelMemory.setLayout(gridLayoutMemory);
         Font font = getTextField().getFont();
         getTextField().setFont(new Font(font.getFontName(), font.getStyle(), font.getSize() + 10));
+        textField.setHorizontalAlignment(JLabel.RIGHT);
+        textField.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createBevelBorder(BevelBorder.LOWERED),
+                BorderFactory.createEmptyBorder(1, 1, 1, 1)));
+
 
         int j=0;
         //789 456 123 = 012 345 678(ind)
@@ -75,9 +86,23 @@ public class GUI {
         panel.add(buttons.get(9));
 
         buttons.add(new JButton(("+/-")));
+        buttons.get(10).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textField.setText("-" + textField.getText());
+            }
+        });
         panel.add(buttons.get(10));
 
         buttons.add(new JButton((",")));
+        buttons.get(11).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!textField.getText().contains(".")) {
+                    textField.setText(textField.getText() + ".");
+                }
+            }
+        });
         panel.add(buttons.get(11));
 
         buttons.add(new JButton(("+")));
@@ -116,13 +141,49 @@ public class GUI {
         buttons.get(18).addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (getTextField().getText().length()==1){
+                if (getTextField().getText().length() == 1) {
                     getTextField().setText("0");
-                }else
-                getTextField().setText(getTextField().getText().substring(0, getTextField().getText().length() - 1));
+                } else
+                    getTextField().setText(getTextField().getText().substring(0, getTextField().getText().length() - 1));
             }
         });
         panelBackspace.add(buttons.get(18));
+
+        buttons.add(new JButton(("MC")));
+        buttons.get(19).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                memory = 0;
+            }
+        });
+        buttons.add(new JButton(("MR")));
+        buttons.get(20).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String mr = (""+memory);
+                textField.setText(mr.endsWith(".0") ? mr = mr.substring(0, mr.length() - 2) : mr);
+
+            }
+        });
+        buttons.add(new JButton(("M-")));
+        buttons.get(21).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                memory = memory - Double.parseDouble(textField.getText());
+            }
+        });
+        buttons.add(new JButton(("M+")));
+        buttons.get(22).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                memory = memory + Double.parseDouble(textField.getText());
+            }
+        });
+        panelMemory.add(buttons.get(19));
+        panelMemory.add(buttons.get(20));
+        panelMemory.add(buttons.get(21));
+        panelMemory.add(buttons.get(22));
+
 
         panelLabel.add(getTextField());
 
@@ -134,7 +195,7 @@ public class GUI {
         panelOperatorsMain.add(BorderLayout.EAST, panelEquals);
 
         panelBackspaceC_Main.add(BorderLayout.WEST, panelC);
-        panelBackspaceC_Main.add(BorderLayout.CENTER, panelBackspace);
+        panelBackspaceC_Main.add(BorderLayout.EAST, panelBackspace);
 
         panelBackspaceC_Operators_Main.add(BorderLayout.NORTH, panelBackspaceC_Main);
         panelBackspaceC_Operators_Main.add(BorderLayout.CENTER, panelOperatorsMain);
@@ -143,8 +204,7 @@ public class GUI {
         panelRight.add(BorderLayout.CENTER, panelBackspaceC_Operators_Main);
 
         frame.add(BorderLayout.EAST, panelRight);
-        // frame.add(BorderLayout.EAST, panelRight);
-
+        frame.add(BorderLayout.WEST, panelMemory);
 
         frame.setResizable(false);
         frame.setVisible(true);
