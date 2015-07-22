@@ -27,7 +27,6 @@ public class GUI {
     private  boolean clear = false;
     private NumButtonListener NBL = new NumButtonListener(this);
     private OperationListener aL = new OperationListener(this);
-    private EqualsListener eL = new EqualsListener(this);
 
     public void build(){
         JFrame frame = new JFrame("Calculator");
