@@ -45,12 +45,13 @@ public class GUI {
     private JMenuItem menuItem1 = new JMenuItem("Standart");
     private JMenuItem menuItem2 = new JMenuItem("Extended");
     private int counter=0;
+    private boolean pushedNum=false;
 
     public void build() {
         JFrame frame = new JFrame("Calculator");
         //frameOperators.add(panelOperators);
         //frameOperators.add(panelEquals);
-        frame.setBounds(100, 100, 300, 174);
+        frame.setBounds(100, 100, 300, 168);
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         panel.setLayout(gridLayoutNumbers);
         panelOperators.setLayout(gridLayoutOperators);
@@ -67,7 +68,7 @@ public class GUI {
         panelOther.setLayout(gridLayoutOther);
         panelLeftSide.setLayout(gridLayoutLeftSide);
         Font font = getTextField().getFont();
-        getTextField().setFont(new Font(font.getFontName(), font.getStyle(), font.getSize() + 10));
+        getTextField().setFont(new Font(font.getFontName(), font.getStyle(), font.getSize() + 8));
         textField.setHorizontalAlignment(JLabel.RIGHT);
         textField.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createBevelBorder(BevelBorder.LOWERED),
@@ -107,7 +108,10 @@ public class GUI {
         buttons.get(10).addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setTextField("-" + textField.getText());
+                if (textField.getText().substring(0).equals("-"))
+                    setTextField(textField.getText().substring(1, textField.getText().length()));
+                else
+                    setTextField("-" + textField.getText());
             }
         });
         panel.add(buttons.get(10));
@@ -275,7 +279,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 panelLeftSide.setVisible(false);
-                frame.setBounds(100, 100, 300, 174);
+                frame.setBounds(100, 100, 300, 168);
             }
         });
 
@@ -283,7 +287,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 panelLeftSide.setVisible(true);
-                frame.setBounds(100, 100, 500, 174);
+                frame.setBounds(100, 100, 500, 168);
             }
         });
 
@@ -376,5 +380,13 @@ public class GUI {
 
     public void setCounter(int counter) {
         this.counter = counter;
+    }
+
+    public boolean isPushedNum() {
+        return pushedNum;
+    }
+
+    public void setPushedNum(boolean pushedNum) {
+        this.pushedNum = pushedNum;
     }
 }

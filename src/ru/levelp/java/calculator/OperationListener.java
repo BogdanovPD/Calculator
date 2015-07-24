@@ -24,8 +24,9 @@ public class OperationListener implements ActionListener {
 //                gui.setOperation(op);
 
             if (gui.getOperation().equals("=") ){
-                if (gui.getCounter()>0 && op.equals("="))
+                if (gui.getCounter()>0 && op.equals("=")){
                     gui.setOperation(gui.getLastOperation());
+                    gui.setLastOperation("=");}
                 else
                     gui.setOperation("");
             }
@@ -33,7 +34,7 @@ public class OperationListener implements ActionListener {
                 gui.setCounter(0);
             }
 
-            if (!gui.getOperation().equals("")) {
+            if ((!gui.getOperation().equals("") && gui.isPushedNum()) || gui.getLastOperation().equals("=")) {
                 String newText = "";
                 double labelText;
                 if ((!op.equals("=")) || (gui.getCounter()==0))
@@ -62,22 +63,18 @@ public class OperationListener implements ActionListener {
             gui.setCurrent(Double.parseDouble(gui.getTextField().getText()));
 
             if (op.equals("+")){
-                gui.setLastOperation(gui.getOperation());
                 gui.setOperation("+");}
             if (op.equals("*")){
-                gui.setLastOperation(gui.getOperation());
                 gui.setOperation("*");}
             if (op.equals("-")){
-                gui.setLastOperation(gui.getOperation());
                 gui.setOperation("-");}
             if (op.equals("/")){
-                gui.setLastOperation(gui.getOperation());
                 gui.setOperation("/");}
             if (op.equals("x^")){
-                gui.setLastOperation(gui.getOperation());
                 gui.setOperation("x^");}
             if (op.equals("="))
                 gui.setCounter(gui.getCounter()+1);
+            gui.setPushedNum(false);
             gui.setClear(false);
 
     }

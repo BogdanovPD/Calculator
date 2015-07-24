@@ -14,6 +14,7 @@ public class NumButtonListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        gui.setPushedNum(true);
         String text = ((JButton)e.getSource()).getText();
         if (gui.getTextField().getText().equals("0")){
             gui.setTextField("");
